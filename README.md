@@ -28,8 +28,8 @@ O projeto foi desenhado respeitando princípios sólidos de Programação Orient
 4. Execute a classe principal da aplicação para abrir a interface gráfica:java EventPlannerGUI
 
 📂 Estrutura de Ficheiros
-Event.java: O modelo de dados encapsulado que representa um evento isolado.
-EventCategory.java: Enumeração com as categorias de eventos disponíveis.
-EventManager.java: O Controlador responsável pela gestão em memória das listas de eventos e pelas operações de leitura/escrita no ficheiro (I/O).
-EventDialog.java: Formulário modal (JDialog) para a criação e edição segura de eventos.
-EventPlannerGUI.java: A janela principal (JFrame) que aloja o calendário de navegação e a lista da agenda diária, contendo o método main da aplicação.
+1. Event.java: O modelo de dados encapsulado que representa um evento isolado.
+2. EventCategory.java: Enumeração com as categorias de eventos disponíveis.
+3. EventManager.java: O Controlador responsável pela gestão em memória das listas de eventos e pelas operações de leitura/escrita no ficheiro (I/O).
+4. EventDialog.java: Formulário modal (JDialog) para a criação e edição segura de eventos.
+5. EventPlannerGUI.java: A janela principal (JFrame) que aloja o calendário de navegação e a lista da agenda diária, contendo o método main da aplicação.
