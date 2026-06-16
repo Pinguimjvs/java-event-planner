@@ -1,6 +1,8 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -34,7 +36,7 @@ public class EventPlannerGUI extends JFrame {
     private DefaultListModel<Event> eventListModel;
     private JList<Event> eventList;
     private JLabel selectedDateLabel;
-    private JLabel statusBar; // NEW: Status bar for real-time user feedback
+    private JLabel statusBar;
 
     public EventPlannerGUI(EventManager eventManager) {
         this.eventManager = eventManager;
@@ -51,36 +53,36 @@ public class EventPlannerGUI extends JFrame {
     }
 
     private void setupWindow() {
-        setTitle("Java Event Planner - Premium Edition");
-        setSize(950, 600); // Slightly larger to accommodate the status bar and HTML buttons
+        setTitle("Java Event Planner - Ultra Premium Edition");
+        setSize(1000, 650); // Maior para respirar melhor
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(new BorderLayout(15, 15));
-        
-        // Adds a nice padding around the whole window
-        ((JPanel)getContentPane()).setBorder(new EmptyBorder(10, 10, 0, 10)); 
+        setLayout(new BorderLayout());
+        getContentPane().setBackground(Color.WHITE); // Fundo limpo
     }
 
     private void initComponents() {
         // --- LEFT PANEL: THE CALENDAR ---
-        JPanel leftPanel = new JPanel(new BorderLayout(10, 10));
-        leftPanel.setBorder(BorderFactory.createTitledBorder("Monthly Calendar"));
+        JPanel leftPanel = new JPanel(new BorderLayout(15, 15));
+        leftPanel.setBackground(Color.WHITE);
+        leftPanel.setBorder(new EmptyBorder(20, 20, 20, 10));
 
-        // Calendar Header
+        // Modern Header for Left Panel
+        JLabel leftHeader = new JLabel("📅 Monthly Calendar");
+        leftHeader.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        leftHeader.setForeground(new Color(30, 30, 30));
+
         JPanel calendarHeader = new JPanel(new BorderLayout());
-        JButton prevBtn = new JButton("◄ Prev");
-        JButton nextBtn = new JButton("Next ►");
+        calendarHeader.setBackground(Color.WHITE);
         
-        // BONUS: "Today" Button
-        JButton todayBtn = new JButton("Today");
+        JButton prevBtn = createFlatButton("◄ Prev", new Color(240, 240, 240), Color.DARK_GRAY);
+        JButton nextBtn = createFlatButton("Next ►", new Color(240, 240, 240), Color.DARK_GRAY);
+        JButton todayBtn = createFlatButton("Today", new Color(220, 235, 255), new Color(0, 102, 204));
         todayBtn.setToolTipText("Jump to current date");
-        todayBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        prevBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        nextBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
+
         monthYearLabel = new JLabel("", SwingConstants.CENTER);
         monthYearLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        monthYearLabel.setForeground(new Color(40, 40, 40));
+        monthYearLabel.setForeground(new Color(60, 60, 60));
 
         prevBtn.addActionListener(e -> { currentMonth = currentMonth.minusMonths(1); renderCalendar(); });
         nextBtn.addActionListener(e -> { currentMonth = currentMonth.plusMonths(1); renderCalendar(); });
@@ -91,77 +93,99 @@ public class EventPlannerGUI extends JFrame {
             updateEventList(); 
         });
 
-        JPanel navPanel = new JPanel(new FlowLayout());
+        JPanel navPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        navPanel.setBackground(Color.WHITE);
         navPanel.add(prevBtn);
         navPanel.add(todayBtn);
         navPanel.add(nextBtn);
 
-        calendarHeader.add(monthYearLabel, BorderLayout.CENTER);
-        calendarHeader.add(navPanel, BorderLayout.SOUTH);
+        calendarHeader.add(leftHeader, BorderLayout.NORTH);
+        calendarHeader.add(Box.createVerticalStrut(15), BorderLayout.CENTER); // Spacing
+        
+        JPanel monthNavWrapper = new JPanel(new BorderLayout());
+        monthNavWrapper.setBackground(Color.WHITE);
+        monthNavWrapper.add(monthYearLabel, BorderLayout.CENTER);
+        monthNavWrapper.add(navPanel, BorderLayout.SOUTH);
+        calendarHeader.add(monthNavWrapper, BorderLayout.SOUTH);
 
-        calendarGridPanel = new JPanel(new GridLayout(0, 7, 5, 5));
+        calendarGridPanel = new JPanel(new GridLayout(0, 7, 8, 8)); // Maior respiro na grade
+        calendarGridPanel.setBackground(Color.WHITE);
+        
         leftPanel.add(calendarHeader, BorderLayout.NORTH);
         leftPanel.add(calendarGridPanel, BorderLayout.CENTER);
 
         // --- RIGHT PANEL: THE EVENT LIST ---
-        JPanel rightPanel = new JPanel(new BorderLayout(10, 10));
-        rightPanel.setBorder(BorderFactory.createTitledBorder("Daily Agenda"));
-        rightPanel.setPreferredSize(new Dimension(380, 0));
+        JPanel rightPanel = new JPanel(new BorderLayout(15, 15));
+        rightPanel.setBackground(new Color(250, 250, 252)); // Cinza ultra leve para contrastar com o branco
+        rightPanel.setBorder(new EmptyBorder(20, 10, 20, 20));
 
-        selectedDateLabel = new JLabel("", SwingConstants.CENTER);
-        selectedDateLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        // Modern Header for Right Panel
+        JLabel rightHeader = new JLabel("📋 Daily Agenda");
+        rightHeader.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        rightHeader.setForeground(new Color(30, 30, 30));
+
+        selectedDateLabel = new JLabel("", SwingConstants.LEFT);
+        selectedDateLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
         selectedDateLabel.setForeground(new Color(0, 102, 204));
+        
+        JPanel rightHeaderWrapper = new JPanel(new BorderLayout());
+        rightHeaderWrapper.setBackground(new Color(250, 250, 252));
+        rightHeaderWrapper.add(rightHeader, BorderLayout.NORTH);
+        rightHeaderWrapper.add(Box.createVerticalStrut(10), BorderLayout.CENTER);
+        rightHeaderWrapper.add(selectedDateLabel, BorderLayout.SOUTH);
 
         eventListModel = new DefaultListModel<>();
         eventList = new JList<>(eventListModel);
-        eventList.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        eventList.setSelectionBackground(new Color(0, 120, 215)); // Modern Windows blue
-        eventList.setSelectionForeground(Color.WHITE);
+        eventList.setBackground(new Color(250, 250, 252));
+        eventList.setSelectionBackground(new Color(230, 240, 255)); 
+        eventList.setSelectionForeground(Color.BLACK);
         
-        // BONUS: Color-coded categories inside the JList
+        // MODERN CARD RENDERER: Transforma a lista num design de cartões com Emojis
         eventList.setCellRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                if (value instanceof Event && !isSelected) {
+                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof Event) {
                     Event ev = (Event) value;
+                    label.setBorder(new EmptyBorder(12, 10, 12, 10)); // Padding do cartão
+                    
+                    String icon = "📌";
+                    String hexColor = "#555555";
                     switch (ev.getCategory()) {
-                        case MEETING: c.setForeground(new Color(0, 102, 204)); break;
-                        case BIRTHDAY: c.setForeground(new Color(204, 0, 102)); break;
-                        case APPOINTMENT: c.setForeground(new Color(0, 153, 51)); break;
-                        default: c.setForeground(Color.DARK_GRAY); break;
+                        case MEETING: icon = "💼"; hexColor = "#0066CC"; break;
+                        case BIRTHDAY: icon = "🎂"; hexColor = "#CC0066"; break;
+                        case APPOINTMENT: icon = "🩺"; hexColor = "#009933"; break;
                     }
+                    
+                    // Renderização HTML para o visual de "Card"
+                    label.setText("<html><div style='width: 250px;'>" +
+                                  "<b style='color:" + hexColor + "; font-size: 11px;'>" + icon + " " + ev.getCategory() + "</b><br>" +
+                                  "<span style='font-size: 14px; color: #333333;'><b>" + ev.getTime() + "</b> - " + ev.getTitle() + "</span>" +
+                                  "</div></html>");
                 }
-                return c;
+                return label;
             }
         });
         
         JScrollPane listScrollPane = new JScrollPane(eventList);
+        listScrollPane.setBorder(BorderFactory.createLineBorder(new Color(230, 230, 230))); // Borda sutil
 
-        // Action Buttons
+        // Action Buttons (Solid Colors)
         JPanel actionPanel = new JPanel(new GridLayout(1, 3, 10, 0));
-        JButton addBtn = new JButton("➕ Add");
-        JButton editBtn = new JButton("✏️ Edit");
-        JButton deleteBtn = new JButton("🗑️ Delete");
-
-        addBtn.setToolTipText("Schedule a new event for the selected date");
-        editBtn.setToolTipText("Modify the details of the selected event");
-        deleteBtn.setToolTipText("Permanently remove the selected event");
+        actionPanel.setBackground(new Color(250, 250, 252));
         
-        addBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        editBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        deleteBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JButton addBtn = createFlatButton("➕ Add", new Color(0, 120, 215), Color.WHITE);
+        JButton editBtn = createFlatButton("✏️ Edit", new Color(240, 140, 0), Color.WHITE);
+        JButton deleteBtn = createFlatButton("🗑️ Delete", new Color(220, 50, 50), Color.WHITE);
 
-        // Envia a data selecionada do calendário para o formulário
         addBtn.addActionListener(e -> {
             EventDialog dialog = new EventDialog(this, null, selectedDate);
-            dialog.setVisible(true); // App pauses here until dialog is closed
-            
+            dialog.setVisible(true); 
             if (dialog.isConfirmed()) {
                 eventManager.addEvent(dialog.getResultEvent());
                 renderCalendar();
                 updateEventList();
-                saveDataSafely(); // Automatically save to file
+                saveDataSafely(); 
                 updateStatus("Event added successfully.");
             }
         });
@@ -202,80 +226,111 @@ public class EventPlannerGUI extends JFrame {
         actionPanel.add(editBtn);
         actionPanel.add(deleteBtn);
 
-        rightPanel.add(selectedDateLabel, BorderLayout.NORTH);
+        rightPanel.add(rightHeaderWrapper, BorderLayout.NORTH);
         rightPanel.add(listScrollPane, BorderLayout.CENTER);
         rightPanel.add(actionPanel, BorderLayout.SOUTH);
+
+        // SPLIT PANE: Permite redimensionar as áreas
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
+        splitPane.setDividerLocation(600); // Espaço inicial
+        splitPane.setDividerSize(3); // Linha super fina e moderna
+        splitPane.setBorder(null);
 
         // --- STATUS BAR ---
         statusBar = new JLabel(" ");
         statusBar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        statusBar.setForeground(Color.GRAY);
-        statusBar.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        statusBar.setForeground(new Color(120, 120, 120));
+        statusBar.setBorder(new EmptyBorder(5, 10, 5, 10));
 
-        add(leftPanel, BorderLayout.CENTER);
-        add(rightPanel, BorderLayout.EAST);
+        add(splitPane, BorderLayout.CENTER);
         add(statusBar, BorderLayout.SOUTH);
     }
 
     /**
-     * Renders the calendar grid for the currentMonth.
+     * Helper to create modern flat buttons without borders.
      */
-    private void renderCalendar() {
-        calendarGridPanel.removeAll(); // Clear previous buttons
+    private JButton createFlatButton(String text, Color bg, Color fg) {
+        JButton btn = new JButton(text);
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        btn.setBackground(bg);
+        btn.setForeground(fg);
+        btn.setFocusPainted(false);
+        btn.setBorder(new EmptyBorder(10, 15, 10, 15));
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btn.setOpaque(true);
+        return btn;
+    }
 
-        // Update Header
+    private void renderCalendar() {
+        calendarGridPanel.removeAll(); 
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
         monthYearLabel.setText(currentMonth.format(formatter).toUpperCase());
 
-        // Add Day of Week labels
-        String[] daysOfWeek = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+        String[] daysOfWeek = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
         for (String day : daysOfWeek) {
             JLabel dayLabel = new JLabel(day, SwingConstants.CENTER);
-            dayLabel.setFont(new Font("Segoe UI", Font.BOLD, 13));
+            dayLabel.setFont(new Font("Segoe UI", Font.BOLD, 12));
+            dayLabel.setForeground(new Color(150, 150, 150));
             calendarGridPanel.add(dayLabel);
         }
 
-        // Calculate blanks before the 1st of the month
         LocalDate firstOfMonth = currentMonth.atDay(1);
-        int dayOfWeekValue = firstOfMonth.getDayOfWeek().getValue(); // 1(Mon) to 7(Sun)
+        int dayOfWeekValue = firstOfMonth.getDayOfWeek().getValue(); 
         int blanks = (dayOfWeekValue == 7) ? 0 : dayOfWeekValue; 
 
         for (int i = 0; i < blanks; i++) {
-            calendarGridPanel.add(new JLabel("")); // Empty placeholder
+            calendarGridPanel.add(new JLabel("")); 
         }
 
-        // Add buttons for each day of the month
         int daysInMonth = currentMonth.lengthOfMonth();
         for (int day = 1; day <= daysInMonth; day++) {
             LocalDate date = currentMonth.atDay(day);
             JButton dayBtn = new JButton();
             dayBtn.setFocusPainted(false);
             dayBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            dayBtn.setBackground(Color.WHITE);
+            dayBtn.setBackground(new Color(250, 250, 250)); // Cinza ultra claro
 
-            // SMART CELLS LOGIC: Render HTML to show dots/counters for events
             List<Event> eventsOnThisDay = eventManager.getEventsByDate(date);
             
             if (!eventsOnThisDay.isEmpty()) {
-                dayBtn.setBackground(new Color(230, 245, 255)); // Soft Blue
+                dayBtn.setBackground(new Color(230, 245, 255)); 
                 dayBtn.setBorder(BorderFactory.createLineBorder(new Color(150, 200, 255), 1));
-                // HTML rendering to show the day number and an event counter below it
-                dayBtn.setText("<html><center><b><font size='4'>" + day + "</font></b><br><font size='2' color='#0066CC'>• " + eventsOnThisDay.size() + "</font></center></html>");
+                dayBtn.setText("<html><center><b><font size='5' color='#1E1E1E'>" + day + "</font></b><br><font size='3' color='#0066CC'>• " + eventsOnThisDay.size() + "</font></center></html>");
             } else {
-                // Non-breaking space (&nbsp;) ensures all buttons have the exact same height even if empty
-                dayBtn.setText("<html><center><b><font size='4'>" + day + "</font></b><br><font size='2'>&nbsp;</font></center></html>");
+                dayBtn.setBorder(BorderFactory.createLineBorder(new Color(240, 240, 240), 1));
+                dayBtn.setText("<html><center><b><font size='5' color='#555555'>" + day + "</font></b><br><font size='3'>&nbsp;</font></center></html>");
             }
 
             if (date.equals(selectedDate)) {
-                dayBtn.setBackground(new Color(255, 225, 100)); // Distinct Gold for selected
-                dayBtn.setBorder(BorderFactory.createLineBorder(new Color(200, 150, 0), 2));
+                dayBtn.setBackground(new Color(255, 240, 180)); 
+                dayBtn.setBorder(BorderFactory.createLineBorder(new Color(230, 180, 0), 2));
             }
 
-            // Click listener
+            // Usability: Hover Effect
+            dayBtn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    if (!date.equals(selectedDate)) {
+                        dayBtn.setBorder(BorderFactory.createLineBorder(new Color(180, 180, 180), 1));
+                    }
+                }
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    if (!date.equals(selectedDate)) {
+                        if (!eventsOnThisDay.isEmpty()) {
+                            dayBtn.setBorder(BorderFactory.createLineBorder(new Color(150, 200, 255), 1));
+                        } else {
+                            dayBtn.setBorder(BorderFactory.createLineBorder(new Color(240, 240, 240), 1));
+                        }
+                    }
+                }
+            });
+
             dayBtn.addActionListener(e -> {
                 selectedDate = date;
-                renderCalendar(); // Re-render to update the highlight colors
-                updateEventList(); // Update the right panel
+                renderCalendar(); 
+                updateEventList(); 
             });
 
             calendarGridPanel.add(dayBtn);
@@ -285,23 +340,17 @@ public class EventPlannerGUI extends JFrame {
         calendarGridPanel.repaint();
     }
 
-    /**
-     * Updates the right panel to show events for the currently selected date.
-     */
     private void updateEventList() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
-        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMM dd"); // Formato mais legível ex: "Monday, Jun 25"
         eventListModel.clear();
         List<Event> dailyEvents = eventManager.getEventsByDate(selectedDate);
         
-        // Dynamic Empty State Feedback
         if (dailyEvents.isEmpty()) {
             selectedDateLabel.setText("No events for " + selectedDate.format(formatter));
-            selectedDateLabel.setForeground(Color.GRAY);
+            selectedDateLabel.setForeground(new Color(150, 150, 150));
         } else {
-            String plural = dailyEvents.size() == 1 ? "Event" : "Events";
-            selectedDateLabel.setText(dailyEvents.size() + " " + plural + " for " + selectedDate.format(formatter));
-            selectedDateLabel.setForeground(new Color(0, 102, 204));
+            selectedDateLabel.setText("Agenda for " + selectedDate.format(formatter));
+            selectedDateLabel.setForeground(new Color(50, 50, 50));
         }
 
         for (Event e : dailyEvents) {
@@ -309,16 +358,10 @@ public class EventPlannerGUI extends JFrame {
         }
     }
 
-    /**
-     * Updates the text in the status bar.
-     */
     private void updateStatus(String message) {
         statusBar.setText(" " + message);
     }
 
-    /**
-     * Checks for upcoming reminders on application startup.
-     */
     private void showStartupReminders() {
         List<Event> reminders = eventManager.getUpcomingReminders();
         if (!reminders.isEmpty()) {
@@ -330,9 +373,6 @@ public class EventPlannerGUI extends JFrame {
         }
     }
 
-    /**
-     * Attempts to save data and shows an error dialog if it fails.
-     */
     private void saveDataSafely() {
         try {
             eventManager.saveToFile();
@@ -343,26 +383,20 @@ public class EventPlannerGUI extends JFrame {
         }
     }
 
-    // --- MAIN METHOD FOR TESTING ---
     public static void main(String[] args) {
-        // PERFUME: Sets the application to look like a modern native OS app instead of default Java
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
-            // Silently fallback to default if system theme fails
+            // Fallback
         }
 
-        // Run application smoothly inside the Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
             EventManager em = new EventManager();
-            
             try {
                 em.loadFromFile();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Could not load data.", "Warning", JOptionPane.WARNING_MESSAGE);
             }
-            
-            // Starts completely empty if there is no previous save file, as requested for the demo!
             new EventPlannerGUI(em).setVisible(true);
         });
     }
