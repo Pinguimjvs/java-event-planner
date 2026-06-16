@@ -24,10 +24,8 @@ O projeto foi desenhado respeitando princípios sólidos de Programação Orient
 ### Passos
 1. Abra a linha de comandos (Terminal).
 2. Navegue até ao diretório onde os ficheiros do projeto estão guardados.
-3. Compile todas as classes Java de uma só vez com o comando:
-javac *.java
-Execute a classe principal da aplicação para abrir a interface gráfica:
-java EventPlannerGUI
+3. Compile todas as classes Java de uma só vez com o comando: javac *.java
+4. Execute a classe principal da aplicação para abrir a interface gráfica:java EventPlannerGUI
 
 📂 Estrutura de Ficheiros
 Event.java: O modelo de dados encapsulado que representa um evento isolado.
