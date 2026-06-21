@@ -1,21 +1,22 @@
 # Java Event Planner
 
-Este projeto é a implementação da versão compacta de um sistema de agendamento e gestão de eventos com interface gráfica (GUI) para a disciplina SCC0504 - Programação Orientada a Objetos.
+Este projeto implementa a versão compacta de um sistema de agendamento e gerenciamento de eventos com interface gráfica (GUI), desenvolvido para a disciplina SCC0504 – Programação Orientada a Objetos.
 
-## Funcionalidades Principais
+## Principais Funcionalidades
 
-- **Calendário Mensal Interativo:** Uma grelha que calcula dinamicamente os dias do mês e destaca visualmente as datas que possuem compromissos através de um marcador de texto puro '(*)' e alteração da cor de fundo.
-- **Gestão Completa de Eventos (CRUD):** Criação, leitura, edição e eliminação de eventos através de janelas modais ('JDialog') com validação de campos (o título não pode ser vazio e as datas/horas devem ser válidas).
-- **Categorização Estruturada:** Organização de compromissos por categorias fixas ('Meeting', 'Birthday', 'Appointment', 'Other') utilizando Enumerações ('Enum').
-- **Persistência de Dados Local (I/O):** Gravação e carregamento automático dos eventos num ficheiro de texto local ('events_data.txt'). O sistema possui tolerância a falhas, ignorando linhas corrompidas e tratando a ausência do ficheiro na primeira execução sem deitar a aplicação abaixo.
-- **Lembretes Automáticos:** Varredura imediata na inicialização do sistema para exibir um alerta visual ('JOptionPane') caso existam eventos com alarmes programados para o dia corrente.
+* **Calendário mensal interativo:** Exibe os dias do mês em uma grade gerada automaticamente e destaca as datas que possuem eventos cadastrados por meio de um marcador "(*)" e de uma mudança na cor de fundo.
+* **Gerenciamento completo de eventos (CRUD):** Permite criar, visualizar, editar e remover eventos utilizando janelas de diálogo (JDialog). O sistema também realiza validações para garantir que os dados informados sejam válidos, como impedir títulos vazios e verificar datas e horários.
+* **Organização por categorias:** Os eventos podem ser classificados em categorias pré-definidas ('Meeting', 'Birthday', 'Appointment' e 'Other'), facilitando a organização dos compromissos.
+* **Persistência de dados em arquivo:** Todos os eventos são salvos automaticamente em um arquivo de texto ('events_data.txt') e carregados novamente quando a aplicação é iniciada. O sistema também trata situações como a ausência do arquivo ou registros inválidos, evitando interrupções inesperadas.
+* **Lembretes de eventos:** Ao iniciar a aplicação, é feita uma verificação dos eventos cadastrados para identificar aqueles cujo lembrete deve ser exibido no dia atual, mostrando uma notificação ao usuário.
 
-## Conceitos de Orientação a Objetos Aplicados
+## Conceitos de Programação Orientada a Objetos Utilizados
 
-- **Encapsulamento:** Os atributos da classe 'Event' são estritamente privados ('private') e o acesso ou modificação dos dados é controlado de forma segura através de métodos *getters* e *setters* com validações embutidas.
-- **Reutilização de Construtores:** Uso do comando 'this(...)' para sobrecarga de construtores, evitando a repetição de código e centralizando a inicialização do objeto.
-- **Estruturas de Dados Dinâmicas:** Utilização de 'List' e 'ArrayList' para gerir as coleções de eventos em memória RAM de forma flexível.
-- **Lógica de Programação Tradicional:** Todo o processamento, filtragem de datas e leitura de ficheiros utiliza laços de repetição tradicionais ('for-each' e 'while'), adequados para o nível de introdução à programação em Java.
+* **Encapsulamento:** Os atributos da classe 'Event' são privados e acessados por meio de métodos *getters* e *setters*, garantindo maior controle sobre os dados armazenados.
+* **Sobrecarga e reutilização de construtores:** Foi utilizado o comando 'this(...)' para reaproveitar código entre construtores e evitar duplicação durante a criação dos objetos.
+* **Estruturas de dados dinâmicas:** Os eventos são armazenados em coleções do tipo 'List' e 'ArrayList', permitindo adicionar e remover elementos de forma flexível.
+* **Estruturas básicas da linguagem:** A lógica da aplicação utiliza laços de repetição tradicionais, como 'for-each' e 'while', para percorrer coleções, processar informações e realizar a leitura dos arquivos.
+
 
 ## Estrutura de Ficheiros (Diretório Raiz Único)
 
