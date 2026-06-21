@@ -1,35 +1,39 @@
 # Java Event Planner
 
-Este projeto é a implementação da versão compacta do **Java Event Planner**, desenvolvido como trabalho final da disciplina **SCC0504**. A aplicação fornece uma interface gráfica interativa (GUI) para agendamento e gestão de eventos, construída integralmente em Java.
+Este projeto é a implementação da versão compacta de um sistema de agendamento e gestão de eventos com interface gráfica (GUI) para a disciplina SCC0504 - Programação Orientada a Objetos.
 
-## 📌 Funcionalidades Principais
-- **Calendário Mensal Dinâmico:** Grelha interativa que destaca visualmente os dias com eventos agendados, mostrando a quantidade exata de eventos planeados através de marcadores HTML inteligentes.
-- **Gestão de Eventos (CRUD):** Permite adicionar, editar e eliminar eventos através de formulários modais com validação rigorosa de dados. A adição de eventos herda automaticamente a data selecionada no calendário.
-- **Categorias Codificadas por Cores:** Organização visual da agenda diária através de categorias (*Meeting, Birthday, Appointment, Other*).
-- **Persistência de Dados Segura:** Os eventos são guardados e carregados automaticamente num ficheiro de texto local (`events_data.txt`), com tratamento avançado de exceções para evitar falhas (crashes) em caso de ficheiros corrompidos ou ausentes na primeira execução.
-- **Sistema de Lembretes:** Notificações em ecrã (pop-up) no arranque da aplicação para alertar o utilizador sobre eventos nas próximas 24 horas.
-- **Interface de Utilizador Premium (UX):** Integração com o *Look and Feel* nativo do sistema operativo, barra de estado para feedback em tempo real e atalhos rápidos de navegação (como o botão "Today").
+## Funcionalidades Principais
 
-## 🏗️ Arquitetura e Conceitos de OOP
-O projeto foi desenhado respeitando princípios sólidos de Programação Orientada a Objetos para garantir um código limpo e de fácil manutenção:
-- **Encapsulamento e Padrão MVC:** Isolamento total entre a lógica de persistência de dados (`EventManager`) e a interface gráfica (`EventPlannerGUI` e `EventDialog`). O modelo oculta os seus campos e expõe apenas os *getters/setters* necessários.
-- **Tipagem Segura:** Utilização de *Enums* (`EventCategory`) para limitar e padronizar os tipos de eventos disponíveis no sistema.
-- **Modern API de Datas:** Adoção do pacote `java.time` (`LocalDate`, `LocalTime`, `YearMonth`) de forma a garantir precisão e facilidade na manipulação do calendário e dos alarmes.
+- **Calendário Mensal Interativo:** Uma grelha que calcula dinamicamente os dias do mês e destaca visualmente as datas que possuem compromissos através de um marcador de texto puro '(*)' e alteração da cor de fundo.
+- **Gestão Completa de Eventos (CRUD):** Criação, leitura, edição e eliminação de eventos através de janelas modais ('JDialog') com validação de campos (o título não pode ser vazio e as datas/horas devem ser válidas).
+- **Categorização Estruturada:** Organização de compromissos por categorias fixas ('Meeting', 'Birthday', 'Appointment', 'Other') utilizando Enumerações ('Enum').
+- **Persistência de Dados Local (I/O):** Gravação e carregamento automático dos eventos num ficheiro de texto local ('events_data.txt'). O sistema possui tolerância a falhas, ignorando linhas corrompidas e tratando a ausência do ficheiro na primeira execução sem deitar a aplicação abaixo.
+- **Lembretes Automáticos:** Varredura imediata na inicialização do sistema para exibir um alerta visual ('JOptionPane') caso existam eventos com alarmes programados para o dia corrente.
 
-## 🚀 Como Compilar e Executar
+## Conceitos de Orientação a Objetos Aplicados
+
+- **Encapsulamento:** Os atributos da classe 'Event' são estritamente privados ('private') e o acesso ou modificação dos dados é controlado de forma segura através de métodos *getters* e *setters* com validações embutidas.
+- **Reutilização de Construtores:** Uso do comando 'this(...)' para sobrecarga de construtores, evitando a repetição de código e centralizando a inicialização do objeto.
+- **Estruturas de Dados Dinâmicas:** Utilização de 'List' e 'ArrayList' para gerir as coleções de eventos em memória RAM de forma flexível.
+- **Lógica de Programação Tradicional:** Todo o processamento, filtragem de datas e leitura de ficheiros utiliza laços de repetição tradicionais ('for-each' e 'while'), adequados para o nível de introdução à programação em Java.
+
+## Estrutura de Ficheiros (Diretório Raiz Único)
+
+Como o projeto foi simplificado para fins de entrega e compilação direta, todos os ficheiros encontram-se na mesma pasta raiz:
+
+1. 'Event.java': Classe modelo que representa um evento e contém as regras de validação.
+2. 'EventCategory.java': Enumeração que padroniza os tipos de eventos permitidos.
+3. 'EventManager.java': Controlador encarregue da lista na memória RAM e dos métodos de leitura/escrita no disco (I/O).
+4. 'EventDialog.java': Interface gráfica do formulário de criação e edição.
+5. 'EventPlannerGUI.java': Janela principal da aplicação que desenha o calendário, a agenda diária e contém o método 'main'.
+
+## Como Compilar e Executar
 
 ### Pré-requisitos
 - Java Development Kit (JDK) 8 ou superior instalado no sistema.
+- Linha de comandos (Terminal) aberta na pasta do projeto.
 
 ### Passos
-1. Abra a linha de comandos (Terminal).
-2. Navegue até ao diretório onde os ficheiros do projeto estão guardados.
-3. Compile todas as classes Java de uma só vez com o comando: javac *.java
-4. Execute a classe principal da aplicação para abrir a interface gráfica:java EventPlannerGUI
-
-📂 Estrutura de Ficheiros
-1. Event.java: O modelo de dados encapsulado que representa um evento isolado.
-2. EventCategory.java: Enumeração com as categorias de eventos disponíveis.
-3. EventManager.java: O Controlador responsável pela gestão em memória das listas de eventos e pelas operações de leitura/escrita no ficheiro (I/O).
-4. EventDialog.java: Formulário modal (JDialog) para a criação e edição segura de eventos.
-5. EventPlannerGUI.java: A janela principal (JFrame) que aloja o calendário de navegação e a lista da agenda diária, contendo o método main da aplicação.
+1. Certifique-se de que todos os ficheiros '.java' estão na mesma pasta (sem subpastas de pacotes).
+2. Compile todas as classes correndo o comando:
+   javac *.java
