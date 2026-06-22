@@ -6,8 +6,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 
 /**
- * A modal dialog used for both Creating and Editing events.
- * Handles user input validation and object instantiation.
+ * Janela de diálogo usada para criar e editar eventos.
+ * Responsável por coletar os dados do usuário e validar as informações.
  */
 public class EventDialog extends JDialog {
 
@@ -19,34 +19,38 @@ public class EventDialog extends JDialog {
     private JComboBox<EventCategory> categoryComboBox;
     private JSpinner reminderSpinner;
 
-    private boolean confirmed = false;
-    private Event resultEvent = null;
-    private Event eventToEdit; // Will be null if creating a new event
+    private boolean confirmed = false; // Indica se o usuário confirmou a ação (salvar)
+    private Event resultEvent = null; // Evento final gerado ou atualizado
+    private Event eventToEdit; // Evento que está sendo editado (null se for criação)
 
     /**
-     * Constructor for the Event Dialog.
-     * @param parent The main application frame to block while this dialog is open.
-     * @param eventToEdit The event to populate fields with (pass null for a new event).
-     * @param defaultDate The default date to show in the date field if creating a new event.
+     * Construtor da janela de evento.
+     * parent: janela principal (bloqueia enquanto este diálogo estiver aberto)
+     * eventToEdit: evento existente para edição (ou null para criar novo)
+     * defaultDate: data padrão quando for criação de novo evento
      */
     public EventDialog(Frame parent, Event eventToEdit, LocalDate defaultDate) {
         super(parent, eventToEdit == null ? "Add New Event" : "Edit Event", true);
         this.eventToEdit = eventToEdit;
-        
+
+        // Monta toda a interface
         setupUI();
-        
+
+        // Se estiver editando, preenche os campos
         if (eventToEdit != null) {
             populateFields(eventToEdit);
         } else {
-            // Default date to the selected date on the calendar if creating a new event
+             // Se for novo evento, define data e hora padrão
             dateField.setText(defaultDate.toString());
             timeField.setText(LocalTime.now().withSecond(0).withNano(0).toString());
         }
-        
+
+        // Ajusta tamanho automaticamente e centraliza a janela
         pack();
         setLocationRelativeTo(parent);
     }
 
+    // Monta toda a interface gráfica do formulário
     private void setupUI() {
         JPanel formPanel = new JPanel(new GridBagLayout());
         formPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
@@ -54,7 +58,7 @@ public class EventDialog extends JDialog {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
 
-        // --- Initialize Components ---
+        // Inicialização dos componentes do formulário
         titleField = new JTextField(20);
         dateField = new JTextField(10);
         dateField.setToolTipText("Format: YYYY-MM-DD");
@@ -63,16 +67,20 @@ public class EventDialog extends JDialog {
         locationField = new JTextField(20);
         
         descriptionArea = new JTextArea(3, 20);
-        descriptionArea.setLineWrap(true);
-        descriptionArea.setWrapStyleWord(true);
-        JScrollPane descScroll = new JScrollPane(descriptionArea);
+        descriptionArea.setLineWrap(true); // Quebra linha automaticamente
+        descriptionArea.setWrapStyleWord(true); // Evita cortar palavras
         
+        // Faz o campo de descrição ter barra de rolagem, permitindo escrever 
+        // textos longos sem perder conteúdo na interface.
+        JScrollPane descScroll = new JScrollPane(descriptionArea); 
+
+        // Cria um menu suspenso preenchido com todas as categorias do enum EventCategory
         categoryComboBox = new JComboBox<>(EventCategory.values());
         
-        // Spinner for Reminder Lead Days (0 to 30 days)
+        // Controle numérico para definir dias de lembrete (0 a 30)
         reminderSpinner = new JSpinner(new SpinnerNumberModel(1, 0, 30, 1));
 
-        // --- Add Components to Form ---
+        // -Adiciona os campos na tela
         int row = 0;
         addFormRow(formPanel, gbc, "Title:", titleField, row++);
         addFormRow(formPanel, gbc, "Date (YYYY-MM-DD):", dateField, row++);
@@ -80,14 +88,15 @@ public class EventDialog extends JDialog {
         addFormRow(formPanel, gbc, "Location:", locationField, row++);
         addFormRow(formPanel, gbc, "Category:", categoryComboBox, row++);
         addFormRow(formPanel, gbc, "Reminder (Days Before):", reminderSpinner, row++);
-        
+
+        // Campo de descrição ocupa mais espaço
         gbc.gridx = 0; gbc.gridy = row; gbc.weightx = 0.0;
         formPanel.add(new JLabel("Description:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0; gbc.fill = GridBagConstraints.BOTH;
         formPanel.add(descScroll, gbc);
         row++;
 
-        // --- Buttons Panel ---
+        // Painel de botões
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton saveBtn = new JButton("Save");
         JButton cancelBtn = new JButton("Cancel");
@@ -113,7 +122,8 @@ public class EventDialog extends JDialog {
         gbc.weightx = 1.0;
         panel.add(comp, gbc);
     }
-
+    
+    // Preenche os campos com os dados de um evento existente
     private void populateFields(Event event) {
         titleField.setText(event.getTitle());
         dateField.setText(event.getDate().toString());
@@ -125,9 +135,9 @@ public class EventDialog extends JDialog {
     }
 
     /**
-     * Validates input fields and creates/updates the event if valid.
-     * Handles exceptions to prevent the application from crashing.
-     */
+    * Valida os dados e cria ou atualiza o evento.
+    * Evita que valores inválidos quebrem o programa.
+    */
     private void attemptSave() {
         String title = titleField.getText().trim();
         if (title.isEmpty()) {
@@ -137,6 +147,7 @@ public class EventDialog extends JDialog {
 
         LocalDate date;
         LocalTime time;
+        // Validação de data e hora
         try {
             date = LocalDate.parse(dateField.getText().trim());
             time = LocalTime.parse(timeField.getText().trim());
@@ -151,10 +162,10 @@ public class EventDialog extends JDialog {
         int reminderDays = (int) reminderSpinner.getValue();
 
         if (eventToEdit == null) {
-            // Create a brand new event
+            // Se não há evento, cria novo
             resultEvent = new Event(title, date, time, location, description, category, reminderDays);
         } else {
-            // Update the existing event references
+            // Caso exista, edita os campos do evento
             eventToEdit.setTitle(title);
             eventToEdit.setDate(date);
             eventToEdit.setTime(time);
@@ -164,15 +175,15 @@ public class EventDialog extends JDialog {
             eventToEdit.setReminderLeadDays(reminderDays);
             resultEvent = eventToEdit;
         }
-
+        // Marca como confirmado e fecha a janela
         confirmed = true;
-        dispose(); // Close the dialog
+        dispose(); 
     }
-
+    // Indica se o usuário salvou o evento
     public boolean isConfirmed() {
         return confirmed;
     }
-
+    // Retorna o evento criado ou editado
     public Event getResultEvent() {
         return resultEvent;
     }
