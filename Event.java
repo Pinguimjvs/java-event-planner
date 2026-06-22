@@ -2,15 +2,19 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 
+// Classe que representa um evento do sistema
+// Os atributos são privados para proteger os dados do objeto.
+// O acesso e a alteração devem ser feitos pelos getters e setters,
+// permitindo validações e mantendo o encapsulamento.
 public class Event {
     private String id; 
     private String title;
-    private LocalDate date;
+    private LocalDate date;  
     private LocalTime time;
     private String location;
     private String description;
     private EventCategory category;
-    private int reminderLeadDays; 
+    private int reminderLeadDays;  // Quantos dias antes o lembrete deve aparecer
 
     // Método privado auxiliar para centralizar a validação (Garante o Encapsulamento)
     private void validateTitle(String title) {
@@ -39,7 +43,9 @@ public class Event {
         this(title, date, null, location, description, category, reminderLeadDays);
     }
 
-    // --- Getters and Setters ---
+    // --- Getters e Setters ---
+    // implementam o encapsulamento, controlando o acesso aos atributos da classe.
+    
     public String getId() { return id; }
 
     public String getTitle() { return title; }
@@ -66,7 +72,8 @@ public class Event {
     public int getReminderLeadDays() { return reminderLeadDays; }
     public void setReminderLeadDays(int reminderLeadDays) { this.reminderLeadDays = reminderLeadDays; }
 
-    // Retorna o texto puro formatado para aparecer na JList
+    // Sobrescreve o método toString para retornar uma versão
+    // formatada do evento, utilizada na exibição da JList
     @Override
     public String toString() {
         String horaStr = (time != null) ? time.toString() : "Dia Inteiro";
