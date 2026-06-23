@@ -91,7 +91,7 @@ public class EventDialog extends JDialog {
 
         // Campo de descrição ocupa mais espaço
         gbc.gridx = 0; gbc.gridy = row; gbc.weightx = 0.0;
-        formPanel.add(new JLabel("Description:"), gbc);
+        formPanel.add(new JLabel("Descrição:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0; gbc.fill = GridBagConstraints.BOTH;
         formPanel.add(descScroll, gbc);
         row++;
