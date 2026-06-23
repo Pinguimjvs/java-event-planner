@@ -43,5 +43,7 @@ Como o projeto foi simplificado para fins de entrega e compilação direta, todo
 
 ### Autores
 Jaqueline Paes de Almeida
+
 João Vitor Salvini
+
 Lucas Jacinto Mariano
