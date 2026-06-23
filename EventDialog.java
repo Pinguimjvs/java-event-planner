@@ -82,12 +82,12 @@ public class EventDialog extends JDialog {
 
         // -Adiciona os campos na tela
         int row = 0;
-        addFormRow(formPanel, gbc, "Title:", titleField, row++);
-        addFormRow(formPanel, gbc, "Date (YYYY-MM-DD):", dateField, row++);
-        addFormRow(formPanel, gbc, "Time (HH:MM):", timeField, row++);
-        addFormRow(formPanel, gbc, "Location:", locationField, row++);
-        addFormRow(formPanel, gbc, "Category:", categoryComboBox, row++);
-        addFormRow(formPanel, gbc, "Reminder (Days Before):", reminderSpinner, row++);
+        addFormRow(formPanel, gbc, "Título:", titleField, row++);
+        addFormRow(formPanel, gbc, "Data (YYYY-MM-DD):", dateField, row++);
+        addFormRow(formPanel, gbc, "Horário (HH:MM):", timeField, row++);
+        addFormRow(formPanel, gbc, "Local:", locationField, row++);
+        addFormRow(formPanel, gbc, "Categoria:", categoryComboBox, row++);
+        addFormRow(formPanel, gbc, "Lembrete (Dias Antes):", reminderSpinner, row++);
 
         // Campo de descrição ocupa mais espaço
         gbc.gridx = 0; gbc.gridy = row; gbc.weightx = 0.0;
@@ -141,7 +141,7 @@ public class EventDialog extends JDialog {
     private void attemptSave() {
         String title = titleField.getText().trim();
         if (title.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Title cannot be empty.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "O título não pode ficar em branco.", "Validation Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -152,7 +152,7 @@ public class EventDialog extends JDialog {
             date = LocalDate.parse(dateField.getText().trim());
             time = LocalTime.parse(timeField.getText().trim());
         } catch (DateTimeParseException ex) {
-            JOptionPane.showMessageDialog(this, "Invalid date or time format.\nUse YYYY-MM-DD for date and HH:MM for time.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Formato inválido de data ou horário.\nUse YYYY-MM-DD para data e HH:MM para horário.", "Validation Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
