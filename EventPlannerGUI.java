@@ -94,8 +94,8 @@ public class EventPlannerGUI extends JFrame {
         // Cabeçalho do calendário (mês/ano + botões)
         JPanel calendarHeader = new JPanel(new BorderLayout());
 
-        JButton prevBtn = new JButton("◄ Prev");
-        JButton nextBtn = new JButton("Next ►");
+        JButton prevBtn = new JButton("◄ Ant");
+        JButton nextBtn = new JButton("Próx ►");
 
         monthYearLabel = new JLabel("", SwingConstants.CENTER);
         monthYearLabel.setFont(new Font("Arial", Font.BOLD, 16));
@@ -240,7 +240,7 @@ public class EventPlannerGUI extends JFrame {
 
         calendarGridPanel.removeAll();
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy", new java.util.Locale("pt", "BR"));
         monthYearLabel.setText(currentMonth.format(formatter).toUpperCase());
 
         // Cabeçalho dos dias da semana
