@@ -244,7 +244,7 @@ public class EventPlannerGUI extends JFrame {
         monthYearLabel.setText(currentMonth.format(formatter).toUpperCase());
 
         // Cabeçalho dos dias da semana
-        String[] daysOfWeek = {"DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"};
+        String[] daysOfWeek = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
         for (String day : daysOfWeek) {
             calendarGridPanel.add(new JLabel(day, SwingConstants.CENTER));
         }
