@@ -1,9 +1,9 @@
 // Representam as categorias possíveis para os eventos
 public enum EventCategory {
-    MEETING("Meeting"),
-    BIRTHDAY("Birthday"),
-    APPOINTMENT("Appointment"),
-    OTHER("Other");
+    MEETING("Reunião"),
+    BIRTHDAY("Aniversário"),
+    APPOINTMENT("Compromisso"),
+    OTHER("Outro");
 
     // final garante que o valor de displayName não pode ser alterado depois de definido,
     // mantendo as categorias consistentes e seguras.
