@@ -40,3 +40,8 @@ Como o projeto foi simplificado para fins de entrega e compilação direta, todo
    javac *.java
 3. Invoque a Máquina Virtual Java chamando a classe de interface primária que hospeda a lógica do ponto de entrada do programa (método main ): 
    java EventPlannerGUI
+
+### Autores
+Jaqueline Paes de Almeida
+João Vitor Salvini
+Lucas Jacinto Mariano
