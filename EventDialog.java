@@ -98,8 +98,8 @@ public class EventDialog extends JDialog {
 
         // Painel de botões
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton saveBtn = new JButton("Save");
-        JButton cancelBtn = new JButton("Cancel");
+        JButton saveBtn = new JButton("Salvar");
+        JButton cancelBtn = new JButton("Cancelar");
 
         saveBtn.addActionListener(e -> attemptSave());
         cancelBtn.addActionListener(e -> dispose());
