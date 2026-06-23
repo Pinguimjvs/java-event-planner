@@ -142,9 +142,9 @@ public class EventPlannerGUI extends JFrame {
         // Painel de ações (CRUD)
         JPanel actionPanel = new JPanel(new GridLayout(1, 3, 5, 0));
 
-        JButton addBtn = new JButton("Add");
-        JButton editBtn = new JButton("Edit");
-        JButton deleteBtn = new JButton("Delete");
+        JButton addBtn = new JButton("Adicionar");
+        JButton editBtn = new JButton("Editar");
+        JButton deleteBtn = new JButton("Deletar");
 
         // ---------------- BOTÃO ADD ----------------
         addBtn.addActionListener(e -> {
@@ -244,7 +244,7 @@ public class EventPlannerGUI extends JFrame {
         monthYearLabel.setText(currentMonth.format(formatter).toUpperCase());
 
         // Cabeçalho dos dias da semana
-        String[] daysOfWeek = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
+        String[] daysOfWeek = {"DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"};
         for (String day : daysOfWeek) {
             calendarGridPanel.add(new JLabel(day, SwingConstants.CENTER));
         }
