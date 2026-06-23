@@ -38,3 +38,5 @@ Como o projeto foi simplificado para fins de entrega e compilação direta, todo
 1. Certifique-se de que todos os ficheiros '.java' estão na mesma pasta (sem subpastas de pacotes).
 2. Compile todas as classes correndo o comando:
    javac *.java
+3. Invoque a Máquina Virtual Java chamando a classe de interface primária que hospeda a lógica do ponto de entrada do programa (método main ): 
+   java EventPlannerGUI
